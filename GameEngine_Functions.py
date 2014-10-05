@@ -13,7 +13,7 @@ def get_int_input(low, high):
             if choice not in range(low, high+1):
                 raise ValueError
         except:
-            display("Invalid input.")
+            display("Invalid input. Enter a number from " + low + " to " + high + ".")
             choice = None
     return choice
 
@@ -24,8 +24,17 @@ def get_player_counts():
     cpu_pcount = get_int_input(2-human_pcount if human_pcount < 2 else 0, 5-human_pcount)
     return human_pcount, cpu_pcount
 
-def get_name():
-    return get_input("Please enter your name.")
+def get_name(taken_names):
+    name = None
+    while not name:
+        try:
+            name = get_input("Please enter your name.")
+            if name in taken_names:
+                raise ValueError
+        except ValueError:
+            display("That name is taken.")
+            name = None
+    return name
 
 def choose(cards):
     display_cards(cards)
