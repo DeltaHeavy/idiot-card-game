@@ -1,9 +1,9 @@
-from random import shuffle
+from random import shuffle # Shuffles the deck
 from GameEngine_Functions import *
 
 class Card:
     def __init__(self, name, value):
-        self.name, self.value = name, value
+        self.name, self.value = name, value # Names are like "2", "3", or "Ace"; Values are like 2, 3, or 14
 
 class Deck:
     def __init__(self):
