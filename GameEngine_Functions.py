@@ -5,24 +5,17 @@ def get_input(message=None):
         display(message)
     return input()
 
-def get_int_input(low, high):
+def get_int_input(low, high, message=None):
     choice = None
     while choice is None:
         try:
-            choice = int(get_input())
+            choice = int(get_input(message))
             if choice not in range(low, high+1):
                 raise ValueError
         except:
-            display("Invalid input. Enter a number from " + low + " to " + high + ".")
+            display("Invalid input. Enter a number from " + str(low) + " to " + str(high+1) + ".")
             choice = None
     return choice
-
-def get_player_counts():
-    display("How many human players? [0-5]")
-    human_pcount = get_int_input(0, 5)
-    display("How many cpu players?")
-    cpu_pcount = get_int_input(2-human_pcount if human_pcount < 2 else 0, 5-human_pcount)
-    return human_pcount, cpu_pcount
 
 def get_name(taken_names):
     name = None
@@ -36,9 +29,43 @@ def get_name(taken_names):
             name = None
     return name
 
+def playable(card, pile):
+    if not pile or card.value == 2 or card.value == 10:
+        return True
+    topcard_v = pile[0].value
+    if topcard_v == 7:
+        if card.value <= 7:
+            return True
+    elif card.value >= topcard_v:
+        return True
+    display(card.name + " can't play on " + pile[0].name)
+    return False
+
+def can_play(cards, pile):
+    if not pile:
+        return True
+    values = [card.value for card in cards]
+    if 10 in values or 2 in values:
+        return True
+    topcard_v = pile[0].value
+    if topcard_v == 7:
+        for x in range(len(cards)):
+            if values[x] <= 7:
+                return True
+    else:
+        for x in range(len(cards)):
+            if values[x] >= topcard_v:
+                return True
+    return False
+
+def blowup(name):
+    display(name + " blew up the pile!")
+    return []
+
 def choose(cards):
+    display("Pick a card to play.")
     display_cards(cards)
-    return get_int_input(0, len(cards))
+    return get_int_input(0, len(cards)-1)
 
 def sort_cards(cards):
     return sorted(cards, key=lambda card: card.value)
