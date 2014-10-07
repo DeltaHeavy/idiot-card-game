@@ -7,13 +7,14 @@ Idiot Rewrite
 * Make game control function scope as logical as possible (e.g. play\_from\_faceups in Player class, no pickup\_func in Pile class)
 
 **Tasks**
-* Game Engine class: Game which will control and progress game state
-* Game Engine classes: Human, Cpu which call respective gameplay functions
-* Game Engine functions for Human which call interface functions
-* Game Engine functions for Cpu (AI) which call interface functions
+* Game Engine class method: CPU turn
+* AI Classes and Functions to match needs of CPU turn
 * Interface functions (first cli, then graphical)
 
 **Completed**
+* Game Engine functions for Human which call interface functions
+* Game Engine classes: Game which will control and progress game state
+* Game Engine classes: Human
 * Game Engine classes: Card, Deck, Pile, Three
 
 **Graphics**

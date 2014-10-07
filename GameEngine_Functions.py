@@ -13,7 +13,7 @@ def get_int_input(low, high, message=None):
             if choice not in range(low, high+1):
                 raise ValueError
         except:
-            display("Invalid input. Enter a number from " + str(low) + " to " + str(high+1) + ".")
+            display("Invalid input. Enter a number from " + str(low) + " to " + str(high) + ".")
             choice = None
     return choice
 
