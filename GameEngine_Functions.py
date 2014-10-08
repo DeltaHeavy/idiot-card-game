@@ -29,18 +29,6 @@ def get_name(taken_names):
             name = None
     return name
 
-def playable(card, pile):
-    if not pile or card.value == 2 or card.value == 10:
-        return True
-    topcard_v = pile[0].value
-    if topcard_v == 7:
-        if card.value <= 7:
-            return True
-    elif card.value >= topcard_v:
-        return True
-    display(card.name + " can't play on " + pile[0].name)
-    return False
-
 def can_play(cards, pile):
     if not pile:
         return True
@@ -58,9 +46,12 @@ def can_play(cards, pile):
                 return True
     return False
 
-def blowup(name):
-    display(name + " blew up the pile!")
-    return []
+def playable(card, pile):
+    playable = can_play([card])
+    if not playable:
+        display(card.name + " can't play on " + pile[0].name)
+        return False
+    return True
 
 def choose(cards):
     display("Pick a card to play.")
@@ -69,6 +60,3 @@ def choose(cards):
 
 def sort_cards(cards):
     return sorted(cards, key=lambda card: card.value)
-
-def victory(player):
-    display(player.name + "is the winner!")

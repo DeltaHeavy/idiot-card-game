@@ -1,5 +1,6 @@
 from random import shuffle # Shuffles the deck
 from GameEngine_Functions import *
+from GameEngine_AI import *
 
 class Card:
     def __init__(self, name, value): # note that suits don't matter
@@ -15,7 +16,6 @@ class Deck:
             for name in names:
                 self.cards.append(Card(name=name, value=names.index(name)+11))
         shuffle(self.cards) # shuffle modifies in-place, no need to assign nor return
-        display_cards(self.cards)
 
     def draw(self): # Draw a card from the deck
         return self.cards.pop(0)
@@ -38,6 +38,7 @@ class Player: # Players can be human or ai
             self.pid = Player.count
             self.name = "CPU-" + str(Player.cpu_pcount)
             Player.cpu_pcount+=1
+            self.ai = AI()
         self.hand = []
         self.faceups = []
         self.facedowns = []
@@ -50,35 +51,37 @@ class Player: # Players can be human or ai
     def play(self, from_where, pile):
         assert from_where in ['hand', 'faceups', 'facedowns']
         if from_where == 'facedowns':
-            return self.facedowns.pop()
+            return [self.facedowns.pop()]
         elif from_where == 'hand':
             cards = self.hand
         elif from_where == 'faceups':
             cards = self.faceups
-        if not can_play(self.hand, pile):
-            return None
-        chosen_index = None
-        while chosen_index is None:
-            chosen_index = choose(cards)
-            if playable(cards[chosen_index], pile):
-                count = 0
-                for card in cards:
-                    if card.value == cards[chosen_index].value:
-                        count+=1
-                if count > 1:
-                    how_many = get_int_input(1, count, "How many would you like to play?")
-                elif count == 1:
-                    how_many = count
-                chosen_cards = []
-                if from_where == 'hand':
-                    for x in range(how_many):
-                        chosen_cards.append(self.hand.pop(self.hand.index(cards[chosen_index])))
-                elif from_where == 'faceups':
-                    for x in range(how_many):
-                        chosen_cards.append(self.faceups.pop(self.faceups.index(cards[chosen_index])))
-                return chosen_cards
-            else:
-                chosen_index = None
+        chosen_cards = []
+        if not can_play(cards, pile):
+            return chosen_cards
+        if self.is_human:
+            chosen_index = None
+            while chosen_index is None:
+                chosen = cards[choose(cards)]
+                if playable(chosen, pile):
+                    count = 0
+                    for card in cards:
+                        if card.value == chosen.value:
+                            count+=1
+                    how_many = 1
+                    if count > 1:
+                        how_many = get_int_input(1, count, "How many would you like to play?")
+                    if from_where == 'hand':
+                        while len(chosen_cards) < how_many:
+                            chosen_cards.append(self.hand.pop(self.hand.index(chosen)))
+                    elif from_where == 'faceups':
+                        while len(chosen_cards) < how_many:
+                            chosen_cards.append(self.faceups.pop(self.faceups.index(chosen)))
+                    return chosen_cards
+                else:
+                    chosen_index = None
+        else:
+            return self.ai.ai_choose(cards, pile)
 
 class Game:
     def __init__(self):
@@ -96,9 +99,15 @@ class Game:
 
     def pickup(self, player):
         for x in range(len(self.pile)):
+            display(player.name = " has to pick up the pile!")
             player.hand.append(self.pile.pop())
 
-    def human_turn(self, player):
+    def blowup(self, name):
+        display(name + " blew up the pile!")
+        self.pile = []
+
+    def turn(self, player):
+        played = []
         if player.hand:
             player.hand = sort_cards(player.hand)
             played = player.play('hand', self.pile)
@@ -106,24 +115,21 @@ class Game:
             played = player.play('faceups', self.pile)
         elif player.facedowns:
             played = player.play('facedowns', self.pile)
-        if played is None:
+        if not played:
             self.pickup(player)
             return True
         while self.deck.cards and len(player.hand) < 3:
             player.hand.append(self.deck.draw())
         for card in played:
             self.pile.insert(0, card)
-        if played[0].value == 10:
-            self.pile = blowup(player.name)
+        if self.pile[0].value == 10:
+            blowup(player.name)
             return False
         elif len(self.pile) >= 4: 
             if self.pile[0].value == self.pile[1].value == self.pile[2].value == self.pile[3].value:
-                self.pile = blowup(player.name)
+                blowup(player.name)
                 return False
         return True
-
-    def cpu_turn(self, player):
-        pass # TODO
 
     def main(self):
         while self.winner is None:
@@ -131,12 +137,10 @@ class Game:
                 for player in self.players:
                     turn_done = False
                     display(player.name + "'s turn:")
-                    if player.is_human:
-                        while not turn_done:
-                            turn_done = self.human_turn(player)
-                    else:
-                        while not turn_done:
-                            turn_done = self.cpu_turn(player)
+                    while not turn_done:
+                        if not player.is_human:
+                            player.ai.update(self)
+                        turn_done = self.turn(player)
                     display("--------------------------------")
                     display_cards(self.pile)
                     display("--------------------------------")
@@ -145,5 +149,5 @@ class Game:
             except KeyboardInterrupt:
                 print()
                 return 1
-        victory(self.winner)
+        display(self.winner.name + " is the winner!")
         return 0
