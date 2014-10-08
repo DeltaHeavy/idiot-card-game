@@ -1,3 +1,4 @@
+# Game Engine Functions
 from Interface import *
 
 def get_input(message=None):
@@ -28,6 +29,9 @@ def get_name(taken_names):
             display("That name is taken.")
             name = None
     return name
+
+def get_difficulty(name):
+    return get_int_input(0, 2, "Choose a difficulty level for " + name)
 
 def can_play(cards, pile):
     if not pile:

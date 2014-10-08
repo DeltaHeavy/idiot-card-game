@@ -7,7 +7,7 @@ Idiot Rewrite
 * Make game control function scope as logical as possible (e.g. play\_from\_faceups in Player class, no pickup\_func in Pile class)
 
 **Tasks**
-* AI Classes and methods to match needs of CPU turn
+* AI Classes/methods to match needs of CPU turn
 * Interface functions (Graphics)
 * Graphics
 

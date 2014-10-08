@@ -1,11 +1,11 @@
-# TODO
-# Shit's about to get real af
+# AI Class and functions(/methods only?)
+# Shit's about to get real
 class AI:
-    def __init__(self):
-        pass
+    def __init__(self, difficulty):
+        self.difficulty = difficulty
 
     def update(self, game):
         pass
 
-    def ai_choose(self, cards, pile):
+    def cpu_choose(self):
         pass

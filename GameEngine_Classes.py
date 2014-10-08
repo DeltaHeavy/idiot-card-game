@@ -1,3 +1,4 @@
+# Game Engine Classes
 from random import shuffle # Shuffles the deck
 from GameEngine_Functions import *
 from GameEngine_AI import *
@@ -30,14 +31,6 @@ class Player: # Players can be human or ai
     def __init__(self, is_human, deck):
         self.is_human = is_human
         self.pid = Player.count # Player id
-        if is_human:
-            self.name = get_name(Player.taken_names)
-            Player.taken_names.append(self.name)
-            Player.human_pcount+=1
-        else:
-            self.name = "CPU-" + str(Player.cpu_pcount)
-            Player.cpu_pcount+=1
-            self.ai = AI()
         self.hand = []
         self.faceups = []
         self.facedowns = []
@@ -45,6 +38,14 @@ class Player: # Players can be human or ai
             self.hand.append(deck.draw())
             self.faceups.append(deck.draw())
             self.facedowns.append(deck.draw())
+        if is_human:
+            self.name = get_name(Player.taken_names)
+            Player.taken_names.append(self.name)
+            Player.human_pcount+=1
+        else:
+            self.name = "CPU-" + str(Player.cpu_pcount)
+            Player.cpu_pcount+=1
+            self.ai = AI(get_difficulty(self.name))
         Player.count+=1
 
     def play(self, from_where, pile):
@@ -61,12 +62,11 @@ class Player: # Players can be human or ai
         if self.is_human:
             chosen_index = None
             while chosen_index is None:
-                chosen_index = choose(cards)
-                chosen_value = cards[chosen_index].value
-                if playable(cards[chosen_index], pile):
+                chosen = cards[choose(cards)]
+                if playable(chosen, pile):
                     count = 0
                     for card in cards:
-                        if card.value == chosen_value:
+                        if card.value == chosen.value:
                             count+=1
                     how_many = 1
                     if count > 1:
@@ -74,13 +74,13 @@ class Player: # Players can be human or ai
                     index = 0
                     if from_where == 'hand':
                         while len(chosen_cards) < how_many:
-                            if self.hand[index].value == chosen_value:
+                            if self.hand[index].value == chosen.value:
                                 chosen_cards.append(self.hand.pop(index))
                             else:
                                 index+=1
                     elif from_where == 'faceups':
                         while len(chosen_cards) < how_many:
-                            if self.faceups[index].value == chosen_value:
+                            if self.faceups[index].value == chosen.value:
                                 chosen_cards.append(self.faceups.pop(index))
                             else:
                                 index+=1
@@ -88,7 +88,14 @@ class Player: # Players can be human or ai
                 else:
                     chosen_index = None
         else:
-            return self.ai.ai_choose(cards, pile)
+            chosen_cards = self.ai.cpu_choose()
+            if from_where == 'hand':
+                for card in chosen_cards:
+                    self.hand.remove(card)
+            elif from_where == 'faceups':
+                for card in chosen_cards:
+                    self.faceups.remove(card)
+            return chosen_cards
 
 class Game:
     def __init__(self):
@@ -142,11 +149,13 @@ class Game:
         while self.winner is None:
             try:
                 for player in self.players:
+                    for player in self.players:
+                        if not player.is_human:
+                            player.ai.update(self)
                     turn_done = False
                     display(player.name + "'s turn:")
                     while not turn_done:
                         if not player.is_human:
-                            player.ai.update(self)
                         turn_done = self.turn(player)
                     display("--------------------------------")
                     display_cards(self.pile)
