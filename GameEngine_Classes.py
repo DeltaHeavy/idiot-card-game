@@ -123,11 +123,11 @@ class Game:
         for card in played:
             self.pile.insert(0, card)
         if self.pile[0].value == 10:
-            blowup(player.name)
+            self.blowup(player.name)
             return False
         elif len(self.pile) >= 4: 
             if self.pile[0].value == self.pile[1].value == self.pile[2].value == self.pile[3].value:
-                blowup(player.name)
+                self.blowup(player.name)
                 return False
         return True
 
