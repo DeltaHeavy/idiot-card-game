@@ -62,21 +62,29 @@ class Player: # Players can be human or ai
         if self.is_human:
             chosen_index = None
             while chosen_index is None:
-                chosen = cards[choose(cards)]
-                if playable(chosen, pile):
+                chosen_index = choose(cards)
+                chosen_value = cards[chosen_index].value
+                if playable(cards[chosen_index], pile):
                     count = 0
                     for card in cards:
-                        if card.value == chosen.value:
+                        if card.value == chosen_value:
                             count+=1
                     how_many = 1
                     if count > 1:
                         how_many = get_int_input(1, count, "How many would you like to play?")
+                    index = 0
                     if from_where == 'hand':
                         while len(chosen_cards) < how_many:
-                            chosen_cards.append(self.hand.pop(self.hand.index(chosen)))
+                            if self.hand[index].value == chosen_value:
+                                chosen_cards.append(self.hand.pop(index))
+                            else:
+                                index+=1
                     elif from_where == 'faceups':
                         while len(chosen_cards) < how_many:
-                            chosen_cards.append(self.faceups.pop(self.faceups.index(chosen)))
+                            if self.faceups[index].value == chosen_value:
+                                chosen_cards.append(self.faceups.pop(index))
+                            else:
+                                index+=1
                     return chosen_cards
                 else:
                     chosen_index = None
@@ -98,8 +106,8 @@ class Game:
         assert human_pcount+cpu_pcount == Player.count and Player.count <= 5
 
     def pickup(self, player):
+        display(player.name + " has to pick up the pile!")
         for x in range(len(self.pile)):
-            display(player.name = " has to pick up the pile!")
             player.hand.append(self.pile.pop())
 
     def blowup(self, name):

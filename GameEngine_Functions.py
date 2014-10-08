@@ -47,7 +47,7 @@ def can_play(cards, pile):
     return False
 
 def playable(card, pile):
-    playable = can_play([card])
+    playable = can_play([card], pile)
     if not playable:
         display(card.name + " can't play on " + pile[0].name)
         return False
