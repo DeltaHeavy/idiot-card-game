@@ -29,13 +29,12 @@ class Player: # Players can be human or ai
 
     def __init__(self, is_human, deck):
         self.is_human = is_human
+        self.pid = Player.count # Player id
         if is_human:
-            self.pid = Player.count
             self.name = get_name(Player.taken_names)
             Player.taken_names.append(self.name)
             Player.human_pcount+=1
         else:
-            self.pid = Player.count
             self.name = "CPU-" + str(Player.cpu_pcount)
             Player.cpu_pcount+=1
             self.ai = AI()
