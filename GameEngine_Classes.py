@@ -34,7 +34,7 @@ class Player: # Players can be human or ai
         self.hand = []
         self.faceups = []
         self.facedowns = []
-        for x in range(3):
+        for x in range(3): # Deal hand, faceups, and facedowns from the deck
             self.hand.append(deck.draw())
             self.faceups.append(deck.draw())
             self.facedowns.append(deck.draw())
@@ -45,20 +45,20 @@ class Player: # Players can be human or ai
         else:
             self.name = "CPU-" + str(Player.cpu_pcount)
             Player.cpu_pcount+=1
-            self.ai = AI(get_difficulty(self.name))
+            self.ai = AI(get_difficulty(self.name)) # CPU wishes it had a brain :P
         Player.count+=1
 
-    def play(self, from_where, pile):
+    def play(self, from_where, pile): # Play a card
         assert from_where in ['hand', 'faceups', 'facedowns']
         if from_where == 'facedowns':
-            return [self.facedowns.pop()]
+            return [self.facedowns.pop()] # Play randomly from facedowns
         elif from_where == 'hand':
             cards = self.hand
         elif from_where == 'faceups':
             cards = self.faceups
         chosen_cards = []
         if not can_play(cards, pile):
-            return chosen_cards
+            return chosen_cards # Has to pickup()
         if self.is_human:
             chosen_index = None
             while chosen_index is None:
@@ -87,7 +87,7 @@ class Player: # Players can be human or ai
                     return chosen_cards
                 else:
                     chosen_index = None
-        else:
+        else: # Elif not is_human
             chosen_cards = self.ai.cpu_choose()
             if from_where == 'hand':
                 for card in chosen_cards:
@@ -97,7 +97,7 @@ class Player: # Players can be human or ai
                     self.faceups.remove(card)
             return chosen_cards
 
-class Game:
+class Game: # Tying it all together
     def __init__(self):
         self.winner = None
         self.deck = Deck()
