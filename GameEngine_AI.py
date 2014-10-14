@@ -3,9 +3,10 @@
 class AI:
     def __init__(self, difficulty):
         self.difficulty = difficulty
+        game = None
 
     def update(self, game):
-        pass
+        self.game = game
 
     def cpu_choose(self):
         pass
