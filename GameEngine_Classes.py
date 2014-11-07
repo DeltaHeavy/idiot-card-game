@@ -54,13 +54,9 @@ class Player: # Players can be human or ai
     def __init__(self, is_human, deck):
         self.is_human = is_human
         self.pid = Player.count # Player id
-        self.hand = []
-        self.faceups = []
-        self.facedowns = []
-        for x in range(3): # Deal hand, faceups, and facedowns from the deck
-            self.hand.append(deck.draw())
-            self.faceups.append(deck.draw())
-            self.facedowns.append(deck.draw())
+        self.hand = [deck.draw() for x in range(3)]
+        self.faceups = [deck.draw() for x in range(3)]
+        self.facedowns = [deck.draw() for x in range(3)]
         if is_human:
             self.name = get_name(Player.taken_names)
             Player.taken_names.append(self.name)
