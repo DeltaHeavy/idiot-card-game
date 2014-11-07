@@ -50,7 +50,7 @@ def can_play(cards, pile): # Playable in iter(cards)
                 return True
     return False
 
-def playable(card, pile): # If single card is playable (exception to philosophy, TODO call playable on iter(card) rather than this
+def playable(card, pile): # If single card is playable (exception to philosophy, TODO call playable on iter(card) rather than this)
     playable = can_play([card], pile)
     if not playable:
         display(card.name + " can't play on " + pile[0].name)
