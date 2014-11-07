@@ -120,7 +120,6 @@ class Player: # Players can be human or ai
 
 class Game: # Tying it all together
     def __init__(self):
-        self.winner = None
         self.deck = Deck()
         self.players = []
         self.pile = []
@@ -167,7 +166,8 @@ class Game: # Tying it all together
         return True
 
     def main(self):
-        while self.winner is None:
+        winner = None
+        while winner is None:
             try:
                 for player in self.players:
                     for player in self.players:
@@ -180,9 +180,9 @@ class Game: # Tying it all together
                             turn_done = self.turn(player)
                     # display_cards(self.pile)
                     if len(player.hand)+len(player.facedowns) == 0:
-                        self.winner = player
+                        winner = player
             except KeyboardInterrupt:
-                print()
+                print() # Carriage return the calling terminal for neatness
                 return 1
-        display(self.winner.name + " is the winner!")
+        display(winner.name + " is the winner!")
         return 0
