@@ -14,14 +14,6 @@ Idiot Card Game
 * Interface functions (Graphics)
 * Graphics
 
-**Completed**
-* Interface functions (CLI)
-* Game Engine functions: get input, get name, playable/can play, choose, sort cards
-* Game Engine classes: Game which will control and progress game state
-* Game Engine classes: Human
-* Game Engine class method: turn
-* Game Engine classes: Card, Deck, Pile, Three
-
 **Graphics**
 * Gather/create static files
 * Gameframe
