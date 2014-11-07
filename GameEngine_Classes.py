@@ -7,10 +7,12 @@ class Card:
     def __init__(self, value): # note that suits don't matter
         self.value = value # Names are like "2", "3", or "Ace"; Values are like 2, 3, or 14
         self.name = self.get_name(value) # get_name() is in a second method incase something else needs to call it
+    
     @classmethod
-    def get_name (cls):
-        names = ['2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'] # all of the card names (easy to look at and cuts down on lines)
-        return names[cls.value]
+    def get_name(card):
+        names = ['2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'] # all of the card names
+        return names[card.value]
+
 class Deck:
     def __init__(self): # Build the deck
         self.cards = []
@@ -37,7 +39,7 @@ class Player: # Players can be human or ai
             choices.append(self.hand.pop())
         if self.is_human: # If human player
             choices = sort_cards(choices)
-            while len(self.faceups) < 3: #aww 
+            while len(self.faceups) < 3:
                 self.faceups.append(choices[choose(choices)])
         else: # If computer player
             choices_values = [card.value for card in choices]
