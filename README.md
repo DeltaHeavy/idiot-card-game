@@ -4,7 +4,7 @@ Idiot Rewrite
 **Philosophies**
 * Only pass iterables of Card instances rather than just instances
 * Make game control flow as understandable as possible by abstracting to verbosely-named functions
-* Make game control function scope as logical as possible (e.g. play\_from\_faceups in Player class, no pickup\_func in Pile class)
+* Make game control function scope as logical as possible (e.g. play\_from\_faceups in Player class)
 
 **Tasks**
 * AI method: AI.cpu\_choose()
@@ -22,4 +22,4 @@ Idiot Rewrite
 **Graphics**
 * Gather/create static files
 * Gameframe
-* Upgrade functions and objects
+* Make interface and graphics happen in the gameframe
