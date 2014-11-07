@@ -23,21 +23,21 @@ class Deck:
 
 class Player: # Players can be human or ai
 
-    count = 0 # for assigning player id (pid)
+    count = 0
     human_pcount = 0 # for checking that there are at least 2 players
     cpu_pcount = 0 # and for naming cpus
     taken_names = [] # for keeping player names unique
 
-    def initial_swap(self):
+    def initial_swap(self): # Executes setup of hand and faceups (in the game, you're allowed to swap between the two before the first turn)
         choices = []
         for x in range(3):
             choices.append(self.faceups.pop())
             choices.append(self.hand.pop())
-        if self.is_human:
+        if self.is_human: # If human player
             choices = sort_cards(choices)
             while len(self.faceups) < 3:
                 self.faceups.append(choices[choose(choices)])
-        else:
+        else: # If computer player
             choices_values = [card.value for card in choices]
             while 10 in choices_values and len(self.faceups) < 3:
                 self.faceups.append(choices.pop(choices_values.index(10))
@@ -53,7 +53,6 @@ class Player: # Players can be human or ai
 
     def __init__(self, is_human, deck):
         self.is_human = is_human
-        self.pid = Player.count # Player id
         self.hand = [deck.draw() for x in range(3)]
         self.faceups = [deck.draw() for x in range(3)]
         self.facedowns = [deck.draw() for x in range(3)]
