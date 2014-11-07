@@ -1,5 +1,7 @@
-Idiot Rewrite
-=============
+Idiot Card Game
+===============
+
+(Yes the game is called idiot, we can play it in class on tuesday as research)
 
 **Philosophies**
 * Only pass iterables of Card instances rather than just instances
