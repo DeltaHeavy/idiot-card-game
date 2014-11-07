@@ -29,18 +29,27 @@ class Player: # Players can be human or ai
     taken_names = [] # for keeping player names unique
 
     def initial_swap(self):
+        choices = []
+        for x in range(3):
+            choices.append(self.faceups.pop())
+            choices.append(self.hand.pop())
         if self.is_human:
-            choices = []
-            for x in range(3):
-                choices.append(self.faceups.pop())
-                choices.append(self.hand.pop())
             choices = sort_cards(choices)
             while len(self.faceups) < 3:
                 self.faceups.append(choices[choose(choices)])
-            for x in range(3):
-                self.hand.append(choices.pop())
         else:
-            pass # AI for initial swap
+            choices_values = [card.value for card in choices]
+            while 10 in choices_values and len(self.faceups) < 3:
+                self.faceups.append(choices.pop(choices_values.index(10))
+                choices_values.remove(10)
+            while 2 in choices_values and len(self.faceups) < 3:
+                self.faceups.append(choices.pop(choices_values.index(2))
+                choices_values.remove(2)
+            while len(self.faceups) < 3:
+                self.faceups.append(choices.pop(choices_values.index(max(choices_values))))
+                choices_values.remove(max(choices_values))
+        for x in range(3):
+            self.hand.append(choices.pop()) 
 
     def __init__(self, is_human, deck):
         self.is_human = is_human
