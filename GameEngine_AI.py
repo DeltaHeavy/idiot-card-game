@@ -5,9 +5,6 @@ class AI:
         self.game = None
         self.memory = [[]]
 
-    def ai_initial_swap(self, hand, faceups):
-        pass
-
     def update(self, game):
         self.game = game
 
