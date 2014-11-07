@@ -89,6 +89,7 @@ class Player: # Players can be human or ai
                     chosen_index = None
         else: # Elif not is_human
             chosen_cards = self.ai.cpu_choose()
+            raise NotImplementedError
             if from_where == 'hand':
                 for card in chosen_cards:
                     self.hand.remove(card)
@@ -156,7 +157,7 @@ class Game: # Tying it all together
                     display(player.name + "'s turn:")
                     while not turn_done:
                         if not player.is_human:
-                        turn_done = self.turn(player)
+                            turn_done = self.turn(player)
                     display("--------------------------------")
                     display_cards(self.pile)
                     display("--------------------------------")

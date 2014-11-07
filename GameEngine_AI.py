@@ -3,6 +3,7 @@ class AI:
     def __init__(self, difficulty):
         self.difficulty = difficulty
         self.game = None
+        self.memory = [[]]
 
     def update(self, game):
         self.game = game
