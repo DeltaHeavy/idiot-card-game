@@ -1,4 +1,3 @@
-# AI Class and functions(/methods only?)
 class AI:
     def __init__(self, difficulty):
         self.difficulty = difficulty
@@ -6,7 +5,7 @@ class AI:
         self.memory = [[]]
 
     def update(self, game):
-        self.game = game
+        self.game = game # TODO This will have to be not this because this is ridiculous
 
     def cpu_choose(self):
-        pass
+        pass # TODO
