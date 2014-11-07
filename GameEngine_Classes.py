@@ -28,6 +28,20 @@ class Player: # Players can be human or ai
     cpu_pcount = 0 # and for naming cpus
     taken_names = [] # for keeping player names unique
 
+    def initial_swap(self):
+        if self.is_human:
+            choices = []
+            for x in range(3):
+                choices.append(self.faceups.pop())
+                choices.append(self.hand.pop())
+            choices = sort_cards(choices)
+            while len(self.faceups) < 3:
+                self.faceups.append(choices[choose(choices)])
+            for x in range(3):
+                self.hand.append(choices.pop())
+        else:
+            pass # AI for initial swap
+
     def __init__(self, is_human, deck):
         self.is_human = is_human
         self.pid = Player.count # Player id
@@ -46,6 +60,7 @@ class Player: # Players can be human or ai
             self.name = "CPU-" + str(Player.cpu_pcount)
             Player.cpu_pcount+=1
             self.ai = AI(get_difficulty(self.name)) # CPU wishes it had a brain :P
+        self.initial_swap()
         Player.count+=1
 
     def play(self, from_where, pile): # Play a card
@@ -158,9 +173,7 @@ class Game: # Tying it all together
                     while not turn_done:
                         if not player.is_human:
                             turn_done = self.turn(player)
-                    display("--------------------------------")
-                    display_cards(self.pile)
-                    display("--------------------------------")
+                    # display_cards(self.pile)
                     if len(player.hand)+len(player.facedowns) == 0:
                         self.winner = player
             except KeyboardInterrupt:
