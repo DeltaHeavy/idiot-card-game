@@ -1,6 +1,8 @@
 Idiot Card Game
 ===============
 
+**Note: as per Dr. Smith's email, we need to involve a microcontroller. That annoyingly scraps this idea."**
+
 (Yes the game is called idiot, we can play it in class on tuesday as research)
 
 I was thinking we could make AI and graphics for this game I half-built. Thoughts?
