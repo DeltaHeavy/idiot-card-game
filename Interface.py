@@ -1,4 +1,4 @@
-# Interface functions which will inject into the GUI
+# Interface functions which will work with the GUI
 # TODO Graphics
 def display(string):
     print(string)
