@@ -30,7 +30,7 @@ def get_name(taken_names): # Naming human players
             name = None
     return name
 
-def get_difficulty(name): # Difficulty in [0, 1, 2] = True
+def get_difficulty(name): # Difficulty in [0, 1, 2] (easy, medium, hard)
     return get_int_input(0, 2, "Choose a difficulty level for " + name)
 
 def can_play(cards, pile): # Playable in iter(cards)
@@ -50,7 +50,7 @@ def can_play(cards, pile): # Playable in iter(cards)
                 return True
     return False
 
-def playable(card, pile): # If single card is playable (exception to philosophy, TODO call playable on iter(card) rather than this)
+def playable(card, pile):
     playable = can_play([card], pile)
     if not playable:
         display(card.name + " can't play on " + pile[0].name)
