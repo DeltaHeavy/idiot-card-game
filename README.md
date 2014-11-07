@@ -12,7 +12,7 @@ Idiot Card Game
 * Debug, test, simplify/improve
 * AI method: AI.cpu\_choose()
 * Interface functions (Graphics)
-* Graphics
+* Graphics (Right now, CLI is employed)
 
 **Graphics**
 * Gather/create static files
