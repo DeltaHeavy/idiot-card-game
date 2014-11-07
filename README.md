@@ -7,6 +7,7 @@ Idiot Rewrite
 * Make game control function scope as logical as possible (e.g. play\_from\_faceups in Player class)
 
 **Tasks**
+* Debug, test, simplify/improve
 * AI method: AI.cpu\_choose()
 * Interface functions (Graphics)
 * Graphics
