@@ -4,18 +4,20 @@ from GameEngine_Functions import *
 from GameEngine_AI import *
 
 class Card:
-    def __init__(self, name, value): # note that suits don't matter
-        self.name, self.value = name, value # Names are like "2", "3", or "Ace"; Values are like 2, 3, or 14
-
+    def __init__(self, value): # note that suits don't matter
+        self.value = value # Names are like "2", "3", or "Ace"; Values are like 2, 3, or 14
+        self.name = self.get_name(value) # get_name() is in a second method incase something else needs to call it
+    @classmethod
+    def get_name (cls):
+        names = ['2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'] # all of the card names (easy to look at and cuts down on lines)
+        return names[cls.value]
 class Deck:
     def __init__(self): # Build the deck
         self.cards = []
         for suit in range(4):
-            for x in range(2, 11):
-                self.cards.append(Card(name=str(x), value=x))
-            names = ['Jack', 'Queen', 'King', 'Ace']
-            for name in names:
-                self.cards.append(Card(name=name, value=names.index(name)+11))
+            for x in range(2, 14):
+                self.cards.append(Card(x))
+            
         shuffle(self.cards) # shuffle modifies in-place, no need to assign nor return
 
     def draw(self): # Draw a card from the deck
@@ -35,7 +37,7 @@ class Player: # Players can be human or ai
             choices.append(self.hand.pop())
         if self.is_human: # If human player
             choices = sort_cards(choices)
-            while len(self.faceups) < 3:
+            while len(self.faceups) < 3: #aww 
                 self.faceups.append(choices[choose(choices)])
         else: # If computer player
             choices_values = [card.value for card in choices]
