@@ -6,20 +6,18 @@ from GameEngine_AI import *
 class Card:
     def __init__(self, value): # note that suits don't matter
         self.value = value # Names are like "2", "3", or "Ace"; Values are like 2, 3, or 14
-        self.name = self.get_name(value) # get_name() is in a second method incase something else needs to call it
+        self.name = self.get_name() # get_name() is in a second method incase something else needs to call it
     
-    @classmethod
-    def get_name(card):
+    def get_name(self):
         names = ['2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'] # all of the card names
-        return names[card.value]
+        return names[self.value-2]
 
 class Deck:
     def __init__(self): # Build the deck
         self.cards = []
         for suit in range(4):
             for x in range(2, 14):
-                self.cards.append(Card(x))
-            
+                self.cards.append(Card(x)) 
         shuffle(self.cards) # shuffle modifies in-place, no need to assign nor return
 
     def draw(self): # Draw a card from the deck
@@ -31,29 +29,6 @@ class Player: # Players can be human or ai
     human_pcount = 0 # for checking that there are at least 2 players
     cpu_pcount = 0 # and for naming cpus
     taken_names = [] # for keeping player names unique
-
-    def initial_swap(self): # Executes setup of hand and faceups (in the game, you're allowed to swap between the two before the first turn)
-        choices = []
-        for x in range(3):
-            choices.append(self.faceups.pop())
-            choices.append(self.hand.pop())
-        if self.is_human: # If human player
-            choices = sort_cards(choices)
-            while len(self.faceups) < 3:
-                self.faceups.append(choices[choose(choices)])
-        else: # If computer player
-            choices_values = [card.value for card in choices]
-            while 10 in choices_values and len(self.faceups) < 3:
-                self.faceups.append(choices.pop(choices_values.index(10))
-                choices_values.remove(10)
-            while 2 in choices_values and len(self.faceups) < 3:
-                self.faceups.append(choices.pop(choices_values.index(2))
-                choices_values.remove(2)
-            while len(self.faceups) < 3:
-                self.faceups.append(choices.pop(choices_values.index(max(choices_values))))
-                choices_values.remove(max(choices_values))
-        for x in range(3):
-            self.hand.append(choices.pop()) 
 
     def __init__(self, is_human, deck):
         self.is_human = is_human
@@ -70,6 +45,29 @@ class Player: # Players can be human or ai
             self.ai = AI(get_difficulty(self.name)) # CPU wishes it had a brain :P
         self.initial_swap()
         Player.count+=1
+
+    def initial_swap(self): # Executes setup of hand and faceups (in the game, you're allowed to swap between the two before the first turn)
+        choices = []
+        for x in range(3):
+            choices.append(self.faceups.pop())
+            choices.append(self.hand.pop())
+        if self.is_human: # If human player
+            choices = sort_cards(choices)
+            while len(self.faceups) < 3:
+                self.faceups.append(choices[choose(choices)])
+        else: # If computer player
+            choices_values = [card.value for card in choices]
+            while 10 in choices_values and len(self.faceups) < 3:
+                self.faceups.append(choices.pop(choices_values.index(10)))
+                choices_values.remove(10)
+            while 2 in choices_values and len(self.faceups) < 3:
+                self.faceups.append(choices.pop(choices_values.index(2)))
+                choices_values.remove(2)
+            while len(self.faceups) < 3:
+                self.faceups.append(choices.pop(choices_values.index(max(choices_values))))
+                choices_values.remove(max(choices_values))
+        for x in range(3):
+            self.hand.append(choices.pop()) 
 
     def play(self, from_where, pile): # Play a card
         assert from_where in ['hand', 'faceups', 'facedowns']
@@ -112,7 +110,6 @@ class Player: # Players can be human or ai
                     chosen_index = None
         else: # Elif not is_human
             chosen_cards = self.ai.cpu_choose()
-            raise NotImplementedError
             if from_where == 'hand':
                 for card in chosen_cards:
                     self.hand.remove(card)
@@ -175,7 +172,7 @@ class Game: # Tying it all together
                 for player in self.players:
                     for player in self.players:
                         if not player.is_human:
-                            player.ai.update(self)
+                            player.ai.update() # TODO
                     turn_done = False
                     display(player.name + "'s turn:")
                     while not turn_done:
