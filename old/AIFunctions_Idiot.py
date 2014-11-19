@@ -1,15 +1,3 @@
-#
-# NOTE
-#
-# There are two disgustingly long functions here which do the basic strategy of the game for the computer players
-#
-# These probably need to be rewritten completely, however, if you read over autoplay_from_hand, you'll understand the basic strategy of the game
-#
-
-
-
-from Functions_Idiot import playable, completes_four # Broken import
-
 def autoplay_from_hand(hand, pile): # At this point, playable(hand, pile) == True
     chosen = [] # Cards to be played
     values = [card.value for card in hand]  # Values of cards in hand
