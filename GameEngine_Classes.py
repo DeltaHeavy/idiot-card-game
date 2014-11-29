@@ -167,7 +167,7 @@ class Game: # Tying it all together
 
     def aiupdate(self):
         info = []
-        info.append(len(self.deck))
+        info.append(len(self.deck.cards))
         info.append(self.pile)
         for player in self.players:
             info.append([player.name, len(player.hand), player.faceups, 
