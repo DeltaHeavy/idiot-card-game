@@ -30,9 +30,6 @@ def get_name(taken_names): # Naming human players
             name = None
     return name
 
-def get_difficulty(name): # Difficulty in [0, 1, 2] (easy, medium, hard)
-    return get_int_input(0, 2, "Choose a difficulty level for " + name)
-
 def can_play(cards, pile): # Playable in iter(cards)
     if not pile:
         return True

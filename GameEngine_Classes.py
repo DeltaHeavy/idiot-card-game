@@ -42,7 +42,7 @@ class Player: # Players can be human or ai
         else:
             self.name = "CPU-" + str(Player.cpu_pcount)
             Player.cpu_pcount+=1
-            self.ai = AI(get_difficulty(self.name)) # CPU wishes it had a brain :P
+            self.ai = AI(self.name, Player.count) # CPU wishes it had a brain :P
         self.initial_swap()
         Player.count+=1
 
@@ -165,6 +165,15 @@ class Game: # Tying it all together
                 return False
         return True
 
+    def aiupdate(self):
+        info = []
+        info.append(len(self.deck))
+        info.append(self.pile)
+        for player in self.players:
+            info.append([player.name, len(player.hand), player.faceups, 
+                len(player.facedowns)])
+        return info
+
     def main(self):
         winner = None
         while winner is None:
@@ -172,7 +181,7 @@ class Game: # Tying it all together
                 for player in self.players:
                     for player in self.players:
                         if not player.is_human:
-                            player.ai.update() # TODO
+                            player.ai.update(self.aiupdate())
                     turn_done = False
                     display(player.name + "'s turn:")
                     while not turn_done:
