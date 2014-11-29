@@ -6,12 +6,13 @@ Idiot Card Game
 * Make game control function scope as logical as possible (e.g. play\_from\_faceups in Player class)
 
 **Tasks**
-* Debug, test, simplify/improve
+* Simplify/improve(/debug)
 * AI method: AI.cpu\_choose()
-* Interface functions (Graphics)
-* Graphics (Right now, CLI is employed)
+* Graphics (See below)
+* Interface functions for graphics (Right now, CLI is employed)
 
 **Graphics**
 * Gather/create static files
-* Gameframe
-* Make interface and graphics happen in the gameframe
+* Create gameframe
+* Make interface functions happen in the gameframe
+* Animate gameplay
