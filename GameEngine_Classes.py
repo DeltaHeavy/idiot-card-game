@@ -24,7 +24,6 @@ class Deck:
         return self.cards.pop(0)
 
 class Player: # Players can be human or ai
-
     count = 0
     human_pcount = 0 # for checking that there are at least 2 players
     cpu_pcount = 0 # and for naming cpus
@@ -54,7 +53,7 @@ class Player: # Players can be human or ai
         if self.is_human: # If human player
             choices = sort_cards(choices)
             while len(self.faceups) < 3:
-                self.faceups.append(choices[choose(choices)])
+                self.faceups.append(choices.pop(swap_choose(choices)))
         else: # If computer player
             choices_values = [card.value for card in choices]
             while 10 in choices_values and len(self.faceups) < 3:
@@ -72,7 +71,9 @@ class Player: # Players can be human or ai
     def play(self, from_where, pile): # Play a card
         assert from_where in ['hand', 'faceups', 'facedowns']
         if from_where == 'facedowns':
-            return [self.facedowns.pop()] # Play randomly from facedowns
+            chosen_card = [self.facedowns.pop()]
+            display(self.name + " played " + str([c.name for c in chosen_card]) + " from their facedowns.")
+            return chosen_card # Play randomly from facedowns
         elif from_where == 'hand':
             cards = self.hand
         elif from_where == 'faceups':
@@ -105,6 +106,7 @@ class Player: # Players can be human or ai
                                 chosen_cards.append(self.faceups.pop(index))
                             else:
                                 index+=1
+                    display(self.name + " played " + str([c.name for c in chosen_cards]) + " from their " + from_where + ".")
                     return chosen_cards
                 else:
                     chosen_index = None
@@ -177,21 +179,16 @@ class Game: # Tying it all together
     def main(self):
         winner = None
         while winner is None:
-            try:
-                for player in self.players:
-                    for player in self.players:
-                        if not player.is_human:
-                            player.ai.update(self.aiupdate())
-                    turn_done = False
-                    display(player.name + "'s turn:")
-                    while not turn_done:
-                        if not player.is_human:
-                            turn_done = self.turn(player)
-                    # display_cards(self.pile)
+            for player in self.players:
+                if not player.is_human:
+                    player.ai.update(self.aiupdate())
+            for player in self.players:
+                turn_done = False
+                display(player.name + "'s turn:")
+                while not turn_done:
+                    turn_done = self.turn(player)
+                    #display_cards(self.pile)
                     if len(player.hand)+len(player.facedowns) == 0:
                         winner = player
-            except KeyboardInterrupt:
-                print() # Carriage return the calling terminal for neatness
-                return 1
         display(winner.name + " is the winner!")
         return 0
