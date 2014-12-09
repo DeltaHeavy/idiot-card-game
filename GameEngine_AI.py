@@ -1,28 +1,39 @@
+def isnextnextwinning(handlen, fdcount):
+    if handlen is None:
+        return None
+    if handlen > 0:
+        return False
+    elif fdcount > 1:
+        return False
+    return True
+
 class OP: # An AI's opponent
     def __init__(self): # Only things a player would know about their opponents
         self.handcount = 0
         self.faceups = []
         self.fdcount = 0
+        self.nextnextwinning = False
 
 class AI: # The AI itself
-    def __init__(self, name, pcount):
+    def __init__(self, name):
         self.name = name # It's own player's name
         self.decklength = 0 # Initial values
         self.pile = []
-        self.ops = [] # A list of opponents
-        for i in range(pcount-1):
-            self.ops.append(OP())
+        self.op = OP() # The next player
 
-    def update(self, info): # Takes info about game state from the Game class
-        self.decklength = info.pop(0)
-        self.pile = info.pop(0)
-        for l in info:
-            if l[0] == self.name: # Mr. AI, don't count yourself as an opponent
-                info.remove(l)
-        for i in range(len(self.ops)): # Update information about opponents
-            self.ops[i].handcount = info[i][1]
-            self.ops[i].faceups = info[i][2]
-            self.ops[i].fdcount = info[i][3]
+    def update(self, info): # Takes info about the next players from the Game class
+        self.decklength = info[0]
+        self.pile = info[1]
+        self.op.handcount = info[2]
+        self.op.faceups = info[3]
+        self.op.fdcount = info[4]
+        self.nextnextwinning = isnextnextwinning(info[5], info[6])
 
     def cpu_choose(self):
+        # 0. Check for op about to win
+        # 1. Check for nextnextwinning if nextnextwinning is not None
+        # 2. Check for completion of 4-of-a-kind
+        # 3. Check for op can't play faceups
+        # 4. Play 6 on 7 if 7 in hand
+        # 5. Play lowest playable
         raise NotImplementedError

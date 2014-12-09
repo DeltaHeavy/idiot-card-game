@@ -41,7 +41,7 @@ class Player: # Players can be human or ai
         else:
             self.name = "CPU-" + str(Player.cpu_pcount)
             Player.cpu_pcount+=1
-            self.ai = AI(self.name, Player.count) # CPU wishes it had a brain :P
+            self.ai = AI(self.name) # CPU wishes it had a brain :P
         self.initial_swap()
         Player.count+=1
 
@@ -167,21 +167,30 @@ class Game: # Tying it all together
                 return False
         return True
 
-    def aiupdate(self):
-        info = []
-        info.append(len(self.deck.cards))
-        info.append(self.pile)
-        for player in self.players:
-            info.append([player.name, len(player.hand), player.faceups, 
-                len(player.facedowns)])
-        return info
+    def aiupdate(self, nextplayer, nextnextplayer):
+        if nextnextplayer is not None:
+            return [len(self.deck.cards), self.pile, len(nextplayer.hand), nextplayer.faceups, len(nextplayer.facedowns),
+                    len(nextnextplayer.hand), len(nextnextplayer.facedowns)]
+        else:
+            return [len(self.deck.cards), self.pile, len(nextplayer.hand), nextplayer.faceups, len(nextplayer.facedowns), None, None]
 
     def main(self):
         winner = None
         while winner is None:
             for player in self.players:
                 if not player.is_human:
-                    player.ai.update(self.aiupdate())
+                    try:
+                        nextplayer = self.players[self.players.index(player)+1]
+                    except IndexError:
+                        nextplayer = self.players[0]
+                    if len(self.players) > 2 and player.ai.nextnextplayer is not None:
+                        try:
+                            nextnextplayer = self.players[self.players.index(player)+2]
+                        except IndexError:
+                            nextnextplayer = self.players[0]
+                    else:
+                        nextnextplayer = None
+                    player.ai.update(self.aiupdate(nextplayer, nextnextplayer))
             for player in self.players:
                 turn_done = False
                 display(player.name + "'s turn:")
