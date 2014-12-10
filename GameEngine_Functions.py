@@ -37,7 +37,7 @@ def get_name(taken_names): # Naming human players
             name = None
     return name
 
-def can_play(cards, pile): # Playable in iter(cards)
+def can_play(cards, pile): # Playable in list(cards)
     if not pile:
         return True
     values = [card.value for card in cards]

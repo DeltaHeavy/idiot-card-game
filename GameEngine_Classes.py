@@ -167,12 +167,12 @@ class Game: # Tying it all together
                 return False
         return True
 
-    def aiupdate(self, nextplayer, nextnextplayer):
+    def aiupdate(self, player, nextplayer, nextnextplayer):
         if nextnextplayer is not None:
-            return [len(self.deck.cards), self.pile, len(nextplayer.hand), nextplayer.faceups, len(nextplayer.facedowns),
+            return [player.hand, player.faceups, len(self.deck.cards), self.pile, len(nextplayer.hand), nextplayer.faceups, len(nextplayer.facedowns),
                     len(nextnextplayer.hand), len(nextnextplayer.facedowns)]
         else:
-            return [len(self.deck.cards), self.pile, len(nextplayer.hand), nextplayer.faceups, len(nextplayer.facedowns), None, None]
+            return [player.hand, player.faceups, len(self.deck.cards), self.pile, len(nextplayer.hand), nextplayer.faceups, len(nextplayer.facedowns), None, None]
 
     def main(self):
         winner = None
@@ -190,7 +190,7 @@ class Game: # Tying it all together
                             nextnextplayer = self.players[0]
                     else:
                         nextnextplayer = None
-                    player.ai.update(self.aiupdate(nextplayer, nextnextplayer))
+                    player.ai.update(self.aiupdate(player, nextplayer, nextnextplayer))
             for player in self.players:
                 turn_done = False
                 display(player.name + "'s turn:")
