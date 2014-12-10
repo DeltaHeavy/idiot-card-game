@@ -1,7 +1,7 @@
 # Game Engine Classes
 from random import shuffle # Shuffles the deck
 from GameEngine_Functions import *
-from GameEngine_AI import *
+from GameEngine_AI import AI
 
 class Card:
     def __init__(self, value): # note that suits don't matter
@@ -23,7 +23,7 @@ class Deck:
     def draw(self): # Draw a card from the deck
         return self.cards.pop(0)
 
-class Player: # Players can be human or ai
+class Player: # Players can be human or cpu
     count = 0
     human_pcount = 0 # for checking that there are at least 2 players
     cpu_pcount = 0 # and for naming cpus
@@ -41,7 +41,7 @@ class Player: # Players can be human or ai
         else:
             self.name = "CPU-" + str(Player.cpu_pcount)
             Player.cpu_pcount+=1
-            self.ai = AI(self.name) # CPU wishes it had a brain :P
+            self.ai = AI() # CPU wishes it had a brain :P
         self.initial_swap()
         Player.count+=1
 

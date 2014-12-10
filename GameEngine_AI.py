@@ -40,8 +40,7 @@ class OP: # An AI's opponent
         self.nextnextwinning = False
 
 class AI: # The AI itself
-    def __init__(self, name):
-        self.name = name # It's own player's name
+    def __init__(self):
         self.hand = []
         self.faceups = []
         self.decklength = 0 # Initial values
