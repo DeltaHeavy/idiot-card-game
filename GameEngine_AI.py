@@ -72,9 +72,21 @@ class AI: # The AI itself
                 if playable([card], self.pile):
                     playable.append(card)
         chosen = []
-        # 0. Check for op about to win
-        # 1. Check for nextnextwinning if nextnextwinning is not None
-        # 2. Check for completion of 4-of-a-kind
-        # 3. Check for playing a 4-of-a-kind
+        # 0. Check for completion of 4-of-a-kind
+        if can_complete_four(playable, self.pile):
+            for card in playable:
+                if card.value == self.pile[0].value:
+                    chosen.append(card)
+            return chosen
+        # 1. Check for playing a 4-of-a-kind
+        values = [card.value for card in playable]
+        for v in values:
+            if values.count(v) == 4:
+                for c in playable:
+                    if c.value == v:
+                        chosen.append(c)
+                return chosen
+        # 2. Check for op about to win
+        # 3. Check for nextnextwinning if nextnextwinning is not None
         # 4. Check for op can't play faceups
         # 5. Play lowest playable
