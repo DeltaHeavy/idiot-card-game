@@ -6,3 +6,6 @@ def display(string):
 def display_cards(cards):
     for card in cards:
         print(cards.index(card), card.name)
+
+def getinput():
+    return input()

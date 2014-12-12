@@ -5,7 +5,7 @@ from sys import exit
 def get_input(message=None): # Getting string and integer inputs
     if message:
         display(message)
-    return input() # Will eventually use GUI
+    return getinput() # Will eventually use GUI
 
 def get_int_input(low, high, message=None): # Getting specifically integer inputs (within a range)
     choice = None
