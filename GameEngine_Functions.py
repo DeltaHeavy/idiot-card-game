@@ -38,19 +38,21 @@ def get_name(taken_names): # Naming human players
     return name
 
 def can_play(cards, pile): # Playable in list(cards)
+    if not cards:
+        return False
     if not pile:
         return True
-    values = [card.value for card in cards]
-    if 10 in values or 2 in values:
-        return True
+    for c in cards:
+        if c.value == 10 or c.value == 2:
+            return True
     topcard_v = pile[0].value
     if topcard_v == 7:
-        for x in range(len(cards)):
-            if values[x] <= 7:
+        for c in cards:
+            if c.value <= 7:
                 return True
     else:
-        for x in range(len(cards)):
-            if values[x] >= topcard_v:
+        for c in cards:
+            if c.value >= topcard_v:
                 return True
     return False
 

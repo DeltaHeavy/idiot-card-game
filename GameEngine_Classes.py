@@ -85,7 +85,7 @@ class Player: # Players can be human or cpu
             chosen_index = None
             while chosen_index is None:
                 chosen = cards[choose(cards)]
-                if playable(chosen, pile):
+                if can_play(chosen, pile):
                     count = 0
                     for card in cards:
                         if card.value == chosen.value:
@@ -113,11 +113,14 @@ class Player: # Players can be human or cpu
         else: # Elif not is_human
             chosen_cards = self.ai.cpu_choose()
             if from_where == 'hand':
+                assert can_play(self.hand, pile)
                 for card in chosen_cards:
                     self.hand.remove(card)
             elif from_where == 'faceups':
+                assert can_play(self.faceups, pile)
                 for card in chosen_cards:
                     self.faceups.remove(card)
+            display(self.name + " played " + str([c.name for c in chosen_cards]) + " from their " + from_where + ".")
             return chosen_cards
 
 class Game: # Tying it all together
@@ -151,7 +154,7 @@ class Game: # Tying it all together
             played = player.play('faceups', self.pile)
         elif player.facedowns:
             played = player.play('facedowns', self.pile)
-        if not played:
+        if not can_play(played, self.pile):
             self.pickup(player)
             return True
         while self.deck.cards and len(player.hand) < 3:
@@ -178,26 +181,32 @@ class Game: # Tying it all together
         winner = None
         while winner is None:
             for player in self.players:
+                if winner:
+                    break
+                display(player.name + "'s turn:")
                 if not player.is_human:
                     try:
                         nextplayer = self.players[self.players.index(player)+1]
                     except IndexError:
                         nextplayer = self.players[0]
-                    if len(self.players) > 2 and player.ai.nextnextplayer is not None:
+                    if len(self.players) > 2 and player.ai.nextnextwinning is not None:
                         try:
                             nextnextplayer = self.players[self.players.index(player)+2]
                         except IndexError:
                             nextnextplayer = self.players[0]
                     else:
                         nextnextplayer = None
-                    player.ai.update(self.aiupdate(player, nextplayer, nextnextplayer))
-            for player in self.players:
                 turn_done = False
-                display(player.name + "'s turn:")
                 while not turn_done:
+                    if not player.is_human:
+                        player.ai.update(self.aiupdate(player, nextplayer, nextnextplayer))
                     turn_done = self.turn(player)
-                    #display_cards(self.pile)
+                    display("-----------------------------")
+                    display("Pile:")
+                    display_cards(self.pile)
+                    display("-----------------------------")
                     if len(player.hand)+len(player.facedowns) == 0:
                         winner = player
+                        break
         display(winner.name + " is the winner!")
         return 0
