@@ -10,7 +10,7 @@ class Card:
     
     def get_name(self):
         names = ['2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'] # all of the card names
-        return names[self.value-2]
+        return names[self.value-2] # Thanks to Jackson Darrow (JuicyPasta on Github) for this method
 
 class Deck:
     def __init__(self): # Build the deck
