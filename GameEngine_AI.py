@@ -3,12 +3,12 @@ from GameEngine_Functions import *
 def can_complete_four(hand, pile): # AI can determine that it could finish a four of a kind
     if not pile:
         return False
-    values = [card.value for card in hand]
-    top_card = pile[len(pile)-1]
+    values = [c.value for c in hand]
+    top_card = pile[0]
     if not top_card.value in values: # If we don't have one of that card
         return False # Then we're done
     hand_count = 0 # We know there's at least one, but we'll count them from zero
-    pile_count = 1 # The top card is one of itself
+    pile_count = 1
     for v in values:
         if v == top_card.value:
             hand_count += 1 # Count instances of top_card in hand
@@ -16,9 +16,8 @@ def can_complete_four(hand, pile): # AI can determine that it could finish a fou
         return False # Then we're done
     if hand_count == 3: # Otherwise if we have all of them in the hand except the one on the pile
         return True # Then we're good
-    topcards = pile[-3:len(pile)-1] # Otherwise if there are cards on the pile matching the top_card
-    topcards.reverse() # We need to check them descendingly
-    for v in [card.value for card in topcards]:
+    topcards = pile[1:4] # Otherwise if there are cards on the pile matching the top_card
+    for v in [c.value for c in topcards]:
         if v == top_card.value:
             pile_count += 1 # Count them if they appear in order
         else:
@@ -72,13 +71,15 @@ class AI: # The AI itself
                     playable.append(card)
         chosen = []
         # 0. Check for completion of 4-of-a-kind
+        display("0")
         if can_complete_four(playable, self.pile):
-            for card in playable:
-                if card.value == self.pile[0].value:
+            for c in playable:
+                if c.value == self.pile[0].value:
                     chosen.append(card)
             return chosen
         # 1. Check for playing a 4-of-a-kind
-        values = [card.value for card in playable]
+        display("1")
+        values = [c.value for c in playable]
         for v in values:
             if values.count(v) == 4:
                 for c in playable:
@@ -86,14 +87,17 @@ class AI: # The AI itself
                         chosen.append(c)
                 return chosen
         # 2. Check for op can't play faceups
+        display("2")
         if self.op.handcount == 0 and self.op.faceups:
             for i in sorted(values):
                 if not i == 10 and not can_play(self.op.faceups, [playable[values.index(i)]]):
                     for c in playable:
                         if c.value == i:
                             chosen.append(c)
+                    display_cards(chosen)
                     return chosen
         # 3. Check for op about to win
+        display("3")
         if iswinning(self.op.handcount, self.op.fdcount):
             for i in range(14, 10, -1):
                 if i in values:
@@ -122,6 +126,7 @@ class AI: # The AI itself
                     if c.value == 10:
                         return [c]
         # 4. Check for nextnextwinning if nextnextwinning is not None
+        display("4")
         if self.nextnextwinning:
             for i in range(3, 15):
                 if i != 7 and i != 10 and i in values:
@@ -144,8 +149,9 @@ class AI: # The AI itself
                     if c.value == 10:
                         return [c]
         # 5. Play lowest playable
-        for i in sorted(values):
-            if i != 2 and i != 10:
+        display("5")
+        for i in range(3, 15):
+            if i in values and i != 2 and i != 10:
                 for c in playable:
                     if c.value == i:
                         chosen.append(c)
