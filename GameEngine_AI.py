@@ -123,7 +123,6 @@ class AI: # The AI itself
                     if c.value == 10:
                         return [c]
         # 4. Check for nextnextwinning if nextnextwinning is not None
-        raise NotImplementedError # It's like a bookmark of completion progress :)
         if self.nextnextwinning:
             for i in range(3, 15):
                 if not (i == 7 or i == 10) and i in values:
@@ -146,3 +145,17 @@ class AI: # The AI itself
                     if c.value == 10:
                         return [c]
         # 5. Play lowest playable
+        for i in sorted(values):
+            if not (i == 2 or i == 10):
+                for c in playable:
+                    if c.value == i:
+                        chosen.append(c)
+                return chosen
+            elif 2 in values:
+                for c in playable:
+                    if c.value == 2:
+                        return [c]
+            elif 10 in values:
+                for c in playable:
+                    if c.value == 10:
+                        return [c]
