@@ -58,7 +58,6 @@ class AI: # The AI itself
         self.nextnextwinning = isnextnextwinning(info[7], info[8])
 
     def cpu_choose(self):
-        raise NotImplementedError # Crash until method is complete
         from_hand = False
         if self.hand:
             from_hand = True
@@ -111,42 +110,17 @@ class AI: # The AI itself
                         chosen.append(c)
                         return chosen
         # 3. Check for nextnextwinning if nextnextwinning is not None
-        if self.nextnextwinning is not None:
-            if self.nextnextwinning:
-                if min(values) > 2 and not (min(values) == 10 or min(values) == 7):
-                    for c in playable:
-                        if c.value == min(values):
-                            chosen.append(c)
-                    return chosen
-                elif min(values) == 7:
-                    if self.op.handcount == 0:
-                        if 7 in [c.value for c in self.op.faceups]:
-                            for c in playable:
-                                if c.value == 7:
-                                    chosen.append(c)
-                            return chosen
-                    else:
-                        for i in range(1, 8):
-                            if not 7+i == 10 and 7+i in values:
-                                for c in playable:
-                                    if c.value == 7+i:
-                                        chosen.append(c)
-                                return chosen
-                            
-                elif min(values) == 10:
-                    for i in range(1, 5):
-                        if 10+i in values:
-                            for c in playable:
-                                if c.value == 10+1:
-                                    chosen.append(c)
-                            return chosen
-                elif min(values) == 2:
-                    if values.count(2) < len(playable):
-                        for i in range(1, 13):
-                            if not 2+i == 10 and 2+i in values:
-                                for c in playable:
-                                    if c.value == 2+i:
-                                        chosen.append(c)
-                                return chosen
+        raise NotImplementedError # It's like a bookmark of completion progress :)
+        if self.nextnextwinning:
+            if min(values) > 2 and not (min(values) == 10 or min(values) == 7):
+                for c in playable:
+                    if c.value == min(values):
+                        chosen.append(c)
+                return chosen
+            elif min(values) == 7 and self.op.handcount == 0 and 7 in [c.value for c in self.op.faceups]:
+                for c in playable:
+                    if c.value == 7:
+                        chosen.append(c)
+                return chosen
         # 4. Check for op can't play faceups
         # 5. Play lowest playable
