@@ -86,7 +86,14 @@ class AI: # The AI itself
                         chosen.append(c)
                 return chosen
         # 2. Check for op can't play faceups
-        raise NotImplementedError # It's like a bookmark of completion progress :)
+        if self.op.handcount == 0 and self.op.faceups:
+            for i in sorted(values):
+                if not i == 10:
+                    if not can_play(self.op.faceups, [playable[values.index(i)]]:
+                        for c in playable:
+                            if c.value == i:
+                                chosen.append(c)
+                        return chosen
         # 3. Check for op about to win
         if iswinning(self.op.handcount, self.op.fdcount):
             for i in range(14, 10, -1):
@@ -116,6 +123,7 @@ class AI: # The AI itself
                     if c.value == 10:
                         return [c]
         # 4. Check for nextnextwinning if nextnextwinning is not None
+        raise NotImplementedError # It's like a bookmark of completion progress :)
         if self.nextnextwinning:
             for i in range(3, 15):
                 if not (i == 7 or i == 10) and i in values:
