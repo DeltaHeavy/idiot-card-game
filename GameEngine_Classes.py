@@ -16,7 +16,7 @@ class Deck:
     def __init__(self): # Build the deck
         self.cards = []
         for suit in range(4):
-            for x in range(2, 14):
+            for x in range(2, 15):
                 self.cards.append(Card(x)) 
         shuffle(self.cards) # shuffle modifies in-place, no need to assign nor return
 
@@ -200,6 +200,7 @@ class Game: # Tying it all together
                 while not turn_done:
                     if not player.is_human:
                         player.ai.update(self.aiupdate(player, nextplayer, nextnextplayer))
+                    display_cards(player.hand)
                     turn_done = self.turn(player)
                     display("-----------------------------")
                     display("Pile:")
