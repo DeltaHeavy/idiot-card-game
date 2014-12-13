@@ -27,10 +27,10 @@ def can_complete_four(hand, pile): # AI can determine that it could finish a fou
         return True # Then we're good
     return False # Otherwise we're done
 
-def isnextnextwinning(handlen, fdcount): # AI determines if the player after next is about to win, to know to play low
-    if handlen is None:
-        return None # eliminates redundant execution
-    return handlen > 0 ^ fdcount > 0
+def iswinning(handcount, fdcount): # AI determines if a player is about to win, to know to play high (if next is winning) or low (if next next is winning)
+    if None in [handcount, fdcount]:
+        return None # eliminates redundant execution for nonexistent next next player
+    return handcount+fdcount < 3 and 0 in [handcount, fdcount]
 
 class OP: # An AI's opponent
     def __init__(self): # Only things a player would know about their opponents
@@ -55,7 +55,7 @@ class AI: # The AI itself
         self.op.handcount = info[4]
         self.op.faceups = info[5]
         self.op.fdcount = info[6]
-        self.nextnextwinning = isnextnextwinning(info[7], info[8])
+        self.nextnextwinning = iswinning(info[7], info[8]) # nextnext gets a variable so we can use None to represent a flag that this should stop being updated
 
     def cpu_choose(self):
         from_hand = False
@@ -85,42 +85,56 @@ class AI: # The AI itself
                     if c.value == v:
                         chosen.append(c)
                 return chosen
-        # 2. Check for op about to win
-        if self.op.fdcount+self.op.handcount < 3 and self.op.fdcount == 0 or self.op.handcount == 0:
-            if max(values) > 10:
-                for c in playable:
-                    if c.value == max(values):
-                        chosen.append(c)
-                return chosen
+        # 2. Check for op can't play faceups
+        raise NotImplementedError # It's like a bookmark of completion progress :)
+        # 3. Check for op about to win
+        if iswinning(self.op.handcount, self.op.fdcount):
+            for i in range(14, 10, -1):
+                if i in values:
+                    for c in playable:
+                        if c.value == i:
+                            chosen.append(c)
+                    return chosen
             elif 7 in values:
                 for c in playable:
                     if c.value == 7:
                         chosen.append(c)
                 return chosen
-            elif values.count(10) < len(playable):
-                for i in range(1, 9):
-                    if 10-i in values:
-                        for c in playable:
-                            if c.value == 10-i:
-                                chosen.append(c)
-                        return chosen
+            for i in range(9, 2, -1):
+                if i in values:
+                    for c in playable:
+                        if c.value == i:
+                            chosen.append(c)
+                    return chosen
+            elif 2 in values:
+                for c in playable:
+                    if c.value == 2:
+                        chosen.append(c)
+                return chosen
             else:
                 for c in playable:
                     if c.value == 10:
-                        chosen.append(c)
-                        return chosen
-        # 3. Check for nextnextwinning if nextnextwinning is not None
-        raise NotImplementedError # It's like a bookmark of completion progress :)
+                        return [c]
+        # 4. Check for nextnextwinning if nextnextwinning is not None
         if self.nextnextwinning:
-            if min(values) > 2 and not (min(values) == 10 or min(values) == 7):
-                for c in playable:
-                    if c.value == min(values):
-                        chosen.append(c)
-                return chosen
-            elif min(values) == 7 and self.op.handcount == 0 and 7 in [c.value for c in self.op.faceups]:
+            for i in range(3, 15):
+                if not (i == 7 or i == 10) and i in values:
+                    for c in playable:
+                        if c.value == i:
+                            chosen.append(c)
+                    return chosen
+            elif 7 in values and self.op.handcount == 0 and 7 in [c.value for c in self.op.faceups]:
                 for c in playable:
                     if c.value == 7:
                         chosen.append(c)
                 return chosen
-        # 4. Check for op can't play faceups
+            elif 2 in values:
+                for c in playable:
+                    if c.value == 2:
+                        chosen.append(c)
+                return chosen
+            else:
+                for c in playable:
+                    if c.value == 10:
+                        return [c]
         # 5. Play lowest playable
