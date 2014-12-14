@@ -69,7 +69,6 @@ class Player: # Players can be human or cpu
             self.hand.append(choices.pop()) 
 
     def play(self, from_where, pile): # Play a card
-        assert from_where in ['hand', 'faceups', 'facedowns']
         if from_where == 'facedowns':
             chosen_card = [self.facedowns.pop()]
             display(self.name + " played " + str([c.name for c in chosen_card]) + " from their facedowns.")
@@ -112,14 +111,25 @@ class Player: # Players can be human or cpu
                     chosen_index = None
         else: # Elif not is_human
             chosen_cards = self.ai.cpu_choose()
+            chosen_values = [c.value for c in chosen_cards]
             if from_where == 'hand':
-                assert can_play(self.hand, pile)
-                for card in chosen_cards:
-                    self.hand.remove(card)
+                i = 0
+                while chosen_values:
+                    card = self.hand[i]
+                    if card.value in chosen_values:
+                        self.hand.remove(card)
+                        chosen_values.remove(card.value)
+                    else:
+                        i+=1
             elif from_where == 'faceups':
-                assert can_play(self.faceups, pile)
-                for card in chosen_cards:
-                    self.faceups.remove(card)
+                i = 0
+                while chosen_values:
+                    card = self.faceups[i]
+                    if card.value in chosen_values:
+                        self.faceups.remove(card)
+                        chosen_values.remove(card.value)
+                    else:
+                        i+=1
             display(self.name + " played " + str([c.name for c in chosen_cards]) + " from their " + from_where + ".")
             return chosen_cards
 
@@ -134,7 +144,6 @@ class Game: # Tying it all together
             self.players.append(Player(is_human=True, deck=self.deck))
         for x in range(cpu_pcount):
             self.players.append(Player(is_human=False, deck=self.deck))
-        assert human_pcount+cpu_pcount == Player.count and Player.count <= 5
 
     def pickup(self, player):
         display(player.name + " has to pick up the pile!")
@@ -198,10 +207,12 @@ class Game: # Tying it all together
                         nextnextplayer = None
                 turn_done = False
                 while not turn_done:
+                    display_cards(player.hand)
                     if not player.is_human:
                         player.ai.update(self.aiupdate(player, nextplayer, nextnextplayer))
-                    display_cards(player.hand)
                     turn_done = self.turn(player)
+                    if not player.is_human:
+                        player.ai.update(self.aiupdate(player, nextplayer, nextnextplayer))
                     display("-----------------------------")
                     display("Pile:")
                     display_cards(self.pile)
