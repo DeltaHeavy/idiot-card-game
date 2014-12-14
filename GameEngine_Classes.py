@@ -84,7 +84,7 @@ class Player: # Players can be human or cpu
             chosen_index = None
             while chosen_index is None:
                 chosen = cards[choose(cards)]
-                if can_play(chosen, pile):
+                if playable(chosen, pile):
                     count = 0
                     for card in cards:
                         if card.value == chosen.value:
