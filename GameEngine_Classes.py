@@ -139,7 +139,8 @@ class Game: # Tying it all together
         self.players = []
         self.pile = []
         human_pcount = get_int_input(0, 5, "How many human players? [0-5]")
-        cpu_pcount = get_int_input(2-human_pcount if human_pcount < 2 else 0, 5-human_pcount, "How many cpu players?")
+        if human_pcount < 5:
+            cpu_pcount = get_int_input(2-human_pcount if human_pcount < 2 else 0, 5-human_pcount, "How many cpu players?")
         for x in range(human_pcount):
             self.players.append(Player(is_human=True, deck=self.deck))
         for x in range(cpu_pcount):
