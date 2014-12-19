@@ -75,7 +75,6 @@ class AI: # The AI itself
             for c in playable_cards:
                 if c.value == self.pile[0].value:
                     chosen.append(c)
-            display("0")
             return chosen
         # 1. Check for playing a 4-of-a-kind
         values = [c.value for c in playable_cards]
@@ -84,7 +83,6 @@ class AI: # The AI itself
                 for c in playable_cards:
                     if c.value == v:
                         chosen.append(c)
-                display("1")
                 return chosen
         # 2. Check for op can't play faceups
         if self.op.handcount == 0 and self.op.faceups:
@@ -93,7 +91,6 @@ class AI: # The AI itself
                     for c in playable_cards:
                         if c.value == i:
                             chosen.append(c)
-                    display("2")
                     return chosen
         # 3. Check for op about to win
         if iswinning(self.op.handcount, self.op.fdcount):
@@ -102,31 +99,26 @@ class AI: # The AI itself
                     for c in playable_cards:
                         if c.value == i:
                             chosen.append(c)
-                    display("3")
                     return chosen
             if 7 in values:
                 for c in playable_cards:
                     if c.value == 7:
                         chosen.append(c)
-                display("3")
                 return chosen
             for i in range(9, 2, -1):
                 if i in values:
                     for c in playable_cards:
                         if c.value == i:
                             chosen.append(c)
-                    display("3")
                     return chosen
             if 2 in values:
                 for c in playable_cards:
                     if c.value == 2:
                         chosen.append(c)
-                display("3")
                 return chosen
             else:
                 for c in playable_cards:
                     if c.value == 10:
-                        display("3")
                         return [c]
         # 4. Check for nextnextwinning if nextnextwinning is not None
         if self.nextnextwinning:
@@ -135,27 +127,22 @@ class AI: # The AI itself
                     for c in playable_cards:
                         if c.value == i:
                             chosen.append(c)
-                    display("4")
                     return chosen
             if 7 in values and self.op.handcount == 0 and 7 in [c.value for c in self.op.faceups]:
                 for c in playable_cards:
                     if c.value == 7:
                         chosen.append(c)
-                display("4")
                 return chosen
             elif 2 in values:
                 for c in playable_cards:
                     if c.value == 2:
                         chosen.append(c)
-                display("4")
                 return chosen
             else:
                 for c in playable_cards:
                     if c.value == 10:
-                        display("4")
                         return [c]
         # 5. Play lowest playable_cards
-        display("5")
         for i in range(3, 15):
             if i in values and i != 2 and i != 10:
                 for c in playable_cards:

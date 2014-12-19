@@ -208,7 +208,6 @@ class Game: # Tying it all together
                         nextnextplayer = None
                 turn_done = False
                 while not turn_done:
-                    display_cards(player.hand)
                     if not player.is_human:
                         player.ai.update(self.aiupdate(player, nextplayer, nextnextplayer))
                     turn_done = self.turn(player)
