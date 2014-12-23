@@ -65,7 +65,7 @@ class AI: # The AI itself
             for card in self.hand:
                 if can_play([card], self.pile):
                     playable_cards.append(card)
-        else:
+        else: # Only play from faceups if we have no hand
             for card in self.faceups:
                 if can_play([card], self.pile):
                     playable_cards.append(card)
