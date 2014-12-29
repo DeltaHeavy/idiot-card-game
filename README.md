@@ -2,7 +2,7 @@ Idiot Card Game
 ===============
 
 **Tasks**
-* Debug
+* Debug (esp. GameEngine\_AI.AI.cpu\_choose)
 * Graphics (See below)
 * Interface functions for graphics (Right now, CLI is employed)
 
