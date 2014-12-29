@@ -161,6 +161,8 @@ class Game: # Tying it all together
             player.hand = sort_cards(player.hand)
             played = player.play('hand', self.pile)
         elif player.faceups:
+            display("Faceups:")
+            display_cards(player.faceups)
             played = player.play('faceups', self.pile)
         elif player.facedowns:
             played = player.play('facedowns', self.pile)
